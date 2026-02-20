@@ -1,7 +1,9 @@
 const dotenv = require ('dotenv')
-const express = require ("express")
-const app = express()
 dotenv.config()
+const express = require ("express")
+const sequelize = require('./config/database')
+const app = express()
+
 
 // parse requests of content type - application/json
 app.use(express.json())
@@ -9,21 +11,13 @@ app.use(express.json())
 // parse requests of content type - application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: true}))
 
-// connect to database
-const Sequelize = require("sequelize")
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-    host: process.env.DB_HOST,
-    dialect: 'mysql'
-} )
-
 sequelize.authenticate()
   .then(() => console.log('Andmebaas ühendatud!'))
   .catch(err => console.error('Viga:', err));
 
-// simple route
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to sequelize application."} )
-} )
+// using routes and controllers
+const articleRouter = require('./routes/article')
+app.use('/', articleRouter)
 
 // listen requests
 app.listen(3000, () => {
