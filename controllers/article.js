@@ -3,6 +3,7 @@ const Sequelize = require('sequelize')
 
 // read model data for table representation
 const Article = require('../models/article')(sequelize, Sequelize.DataTypes)
+const Author = require('../models/author')(sequelize, Sequelize.DataTypes)
 
 // get all data from table
 const getAllArticles = (req, res) => {
@@ -21,7 +22,10 @@ const getArticleBySlug = (req, res) => {
     Article.findOne({
         where: {
             slug: req.params.slug
-        } 
+        },
+        include:[{
+            model: models.Author
+        }],  
     } )
     .then(article =>{
         console.log(article)
