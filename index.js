@@ -18,6 +18,7 @@ sequelize.authenticate()
 // using routes and controllers
 const articleRouter = require('./routes/article')
 app.use('/', articleRouter)
+app.use('/article', articleRouter)
 
 // listen requests
 app.listen(3000, () => {
