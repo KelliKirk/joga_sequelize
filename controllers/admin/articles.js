@@ -34,5 +34,46 @@ const createArticle = (req, res) => {
     } )
 } 
 
+const updateArticle = (req, res) => {
+    const id = req.params.id
+
+    if (req.method === 'GET') {
+        // loe artikli andmed andmebaasist
+        models.Article.findOne({
+            where: { id: id }
+        })
+        .then(article => {
+            // loe ka autorite andmed
+            models.Author.findAll()
+            .then(authors => {
+                return res.status(200).json({ article, authors })
+            })
+        })
+        .catch(error => {
+            return res.status(500).send(error.message)
+        })
+
+    } else if (req.method === 'POST') {
+        // uuenda artikli andmed
+        models.Article.findOne({ where: { id: id } })
+        .then(article => {
+            return article.update({
+                name: req.body.name,
+                slug: req.body.slug,
+                image: req.body.image,
+                body: req.body.body,
+                published: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                author_id: req.body.author_id
+            })
+        })
+        .then(() => {
+            return res.status(200).json({ message: 'Article updated.' })
+        })
+        .catch(error => {
+            return res.status(500).send(error.message)
+        })
+    }
+}
+
 // export controller functions
-module.exports = { createArticle } 
+module.exports = { createArticle, updateArticle } 

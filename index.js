@@ -24,6 +24,7 @@ app.use('/article', articleRouter)
 app.use('/author', authorRouter);
 app.use('admin/article,', articleRouter)
 
+
 // listen requests
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000')
