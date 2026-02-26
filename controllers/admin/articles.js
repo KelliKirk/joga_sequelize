@@ -38,12 +38,10 @@ const updateArticle = (req, res) => {
     const id = req.params.id
 
     if (req.method === 'GET') {
-        // loe artikli andmed andmebaasist
         models.Article.findOne({
             where: { id: id }
         })
         .then(article => {
-            // loe ka autorite andmed
             models.Author.findAll()
             .then(authors => {
                 return res.status(200).json({ article, authors })
@@ -53,8 +51,19 @@ const updateArticle = (req, res) => {
             return res.status(500).send(error.message)
         })
 
+    } else if (req.method === 'POST' && req.body._method === 'DELETE') {
+        models.Article.findOne({ where: { id: id } })
+        .then(article => {
+            return article.destroy()
+        })
+        .then(() => {
+            return res.status(200).json({ message: 'Article deleted.' })
+        })
+        .catch(error => {
+            return res.status(500).send(error.message)
+        })
+
     } else if (req.method === 'POST') {
-        // uuenda artikli andmed
         models.Article.findOne({ where: { id: id } })
         .then(article => {
             return article.update({
