@@ -10,10 +10,14 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       article_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'article', key: 'id'},
+        onDelete: 'CASCADE' 
       },
       tag_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'tag', key: 'id'},
+        onDelete: 'CASCADE' 
       },
       createdAt: {
         allowNull: false,
